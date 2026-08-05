@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import StatusBadge from "@/components/ui/StatusBadge";
+import Modal from "@/components/ui/Modal";
 import { updateLeadStatus, ApiRequestError } from "@/lib/api";
 import { LEAD_STATUSES } from "@/lib/types";
 import type { Lead, LeadStatus } from "@/lib/types";
@@ -13,7 +14,11 @@ interface LeadTableProps {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
+  // MongoDB/PyMongo often returns naive datetimes for UTC times. 
+  // Append 'Z' if it's missing timezone information so the browser parses it as UTC.
+  const dateStr = iso.endsWith('Z') || iso.match(/[+-]\d{2}:\d{2}$/) ? iso : `${iso}Z`;
+  
+  return new Date(dateStr).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -41,6 +46,7 @@ export default function LeadTable({
 }: LeadTableProps) {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [errorId, setErrorId] = useState<string | null>(null);
+  const [messageModalLead, setMessageModalLead] = useState<Lead | null>(null);
 
   async function handleStatusChange(lead: Lead, newStatus: LeadStatus) {
     if (newStatus === lead.status) return;
@@ -128,7 +134,17 @@ export default function LeadTable({
                   {lead.budget_range}
                 </td>
                 <td className="px-5 py-4 text-sm text-slate-400 hidden lg:table-cell max-w-[250px]">
-                  <span className="line-clamp-2">{lead.message}</span>
+                  <div className="flex flex-col items-start gap-1">
+                    <span className="line-clamp-2">{lead.message}</span>
+                    {lead.message.length > 80 && (
+                      <button 
+                        onClick={() => setMessageModalLead(lead)}
+                        className="text-indigo-400 hover:text-indigo-300 text-xs font-medium cursor-pointer transition-colors"
+                      >
+                        Read more
+                      </button>
+                    )}
+                  </div>
                 </td>
                 <td className="px-5 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
@@ -199,7 +215,17 @@ export default function LeadTable({
               </div>
               <StatusBadge status={lead.status} />
             </div>
-            <p className="text-xs text-slate-400 line-clamp-2">{lead.message}</p>
+            <div>
+              <p className="text-xs text-slate-400 line-clamp-2">{lead.message}</p>
+              {lead.message.length > 80 && (
+                <button 
+                  onClick={() => setMessageModalLead(lead)}
+                  className="text-indigo-400 hover:text-indigo-300 text-xs font-medium cursor-pointer mt-1 transition-colors"
+                >
+                  Read more
+                </button>
+              )}
+            </div>
             <div className="flex items-center justify-between gap-3 pt-1 border-t border-white/5">
               <span className="text-xs text-slate-500">{lead.budget_range}</span>
               <select
@@ -227,6 +253,25 @@ export default function LeadTable({
           </div>
         ))}
       </div>
+
+      <Modal
+        isOpen={!!messageModalLead}
+        onClose={() => setMessageModalLead(null)}
+        title="Project Details"
+      >
+        <div className="space-y-4">
+          <div>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">From</p>
+            <p className="text-sm text-white">{messageModalLead?.name} <span className="text-slate-400">&lt;{messageModalLead?.email}&gt;</span></p>
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Message</p>
+            <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">
+              {messageModalLead?.message}
+            </p>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }
