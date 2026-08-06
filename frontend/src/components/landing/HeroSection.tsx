@@ -2,8 +2,8 @@
 
 export default function HeroSection() {
   return (
-    <section className="relative px-4 sm:px-6 pt-20 sm:pt-28 pb-16 sm:pb-24">
-      <div className="max-w-4xl mx-auto text-center">
+    <section className="relative px-4 sm:px-6 min-h-[calc(100vh-4rem)] flex flex-col justify-center pb-24">
+      <div className="max-w-4xl mx-auto text-center w-full">
         {/* Availability badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-400 font-medium mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
