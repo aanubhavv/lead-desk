@@ -14,6 +14,15 @@ export const BUDGET_RANGES = [
 
 export type BudgetRange = (typeof BUDGET_RANGES)[number];
 
+export const PROJECT_TYPES = [
+  "Website",
+  "Shopify App",
+  "Mobile App",
+  "Other",
+] as const;
+
+export type ProjectType = (typeof PROJECT_TYPES)[number];
+
 export const LEAD_STATUSES = ["New", "Contacted", "Closed"] as const;
 export type LeadStatus = (typeof LEAD_STATUSES)[number];
 
@@ -35,6 +44,7 @@ export interface LeadCreatePayload {
   email: string;
   budget_range: BudgetRange;
   message: string;
+  project_type?: ProjectType;
 }
 
 export interface LeadListResponse {

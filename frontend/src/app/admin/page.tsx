@@ -68,7 +68,7 @@ export default function AdminDashboardPage() {
             {loading ? "Loading..." : `${total} lead${total !== 1 ? "s" : ""} total`}
           </p>
         </div>
-        <div className="w-full sm:w-80">
+        <div className="w-full sm:w-96">
           <SearchBar onSearch={handleSearch} />
         </div>
       </div>

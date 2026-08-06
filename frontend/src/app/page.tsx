@@ -1,5 +1,10 @@
-import LeadForm from "@/components/LeadForm";
 import Link from "next/link";
+import HeroSection from "@/components/landing/HeroSection";
+import SocialProofBar from "@/components/landing/SocialProofBar";
+import ServicesSection from "@/components/landing/ServicesSection";
+import TestimonialsSection from "@/components/landing/TestimonialsSection";
+import FAQSection from "@/components/landing/FAQSection";
+import ContactSection from "@/components/landing/ContactSection";
 
 export default function Home() {
   return (
@@ -17,40 +22,37 @@ export default function Home() {
               Lead<span className="text-indigo-400">Desk</span>
             </span>
           </Link>
-          <Link
-            href="/admin/login"
-            className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
-          >
-            Admin
-          </Link>
+          <nav className="flex items-center gap-6">
+            <a
+              href="#services"
+              className="hidden sm:inline text-sm text-slate-500 hover:text-slate-300 transition-colors"
+            >
+              Services
+            </a>
+            <a
+              href="#contact"
+              className="hidden sm:inline text-sm text-slate-500 hover:text-slate-300 transition-colors"
+            >
+              Contact
+            </a>
+            <Link
+              href="/admin/login"
+              className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+            >
+              Admin
+            </Link>
+          </nav>
         </div>
       </header>
 
-      {/* Hero + Form */}
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12 sm:py-20">
-        <div className="w-full max-w-xl animate-fade-in">
-          {/* Hero text */}
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-400 font-medium mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-              We&apos;re taking new projects
-            </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
-              Let&apos;s build something{" "}
-              <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-                great together
-              </span>
-            </h1>
-            <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-md mx-auto leading-relaxed">
-              Tell us about your project and budget. We&apos;ll get back to you within 24 hours with a tailored proposal.
-            </p>
-          </div>
-
-          {/* Form card */}
-          <div className="glass rounded-2xl p-6 sm:p-8 glow">
-            <LeadForm />
-          </div>
-        </div>
+      {/* Funnel sections */}
+      <main className="flex-1">
+        <HeroSection />
+        <SocialProofBar />
+        <ServicesSection />
+        <TestimonialsSection />
+        <FAQSection />
+        <ContactSection />
       </main>
 
       {/* Footer */}

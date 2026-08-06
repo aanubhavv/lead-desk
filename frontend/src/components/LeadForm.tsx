@@ -6,17 +6,22 @@ import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Textarea from "@/components/ui/Textarea";
 import { submitLead, ApiRequestError } from "@/lib/api";
-import { BUDGET_RANGES } from "@/lib/types";
-import type { BudgetRange } from "@/lib/types";
+import { BUDGET_RANGES, PROJECT_TYPES } from "@/lib/types";
+import type { BudgetRange, ProjectType } from "@/lib/types";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const BUDGET_OPTIONS = BUDGET_RANGES.map((b) => ({ value: b, label: b }));
+const PROJECT_TYPE_OPTIONS = PROJECT_TYPES.map((t) => ({
+  value: t,
+  label: t,
+}));
 
 interface FormData {
   name: string;
   email: string;
   budget_range: string;
+  project_type: string;
   message: string;
 }
 
@@ -62,6 +67,8 @@ function validate(data: FormData): FormErrors {
     errors.message = "Message must be at most 2,000 characters.";
   }
 
+  // project_type is intentionally NOT validated — it's optional
+
   return errors;
 }
 
@@ -70,6 +77,7 @@ export default function LeadForm() {
     name: "",
     email: "",
     budget_range: "",
+    project_type: "",
     message: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -111,10 +119,19 @@ export default function LeadForm() {
         email: formData.email.trim(),
         budget_range: formData.budget_range as BudgetRange,
         message: formData.message.trim(),
+        ...(formData.project_type
+          ? { project_type: formData.project_type as ProjectType }
+          : {}),
       });
 
       setSubmitted(true);
-      setFormData({ name: "", email: "", budget_range: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        budget_range: "",
+        project_type: "",
+        message: "",
+      });
     } catch (err) {
       if (err instanceof ApiRequestError) {
         if (err.status === 422 && err.data.details) {
@@ -198,16 +215,27 @@ export default function LeadForm() {
         />
       </div>
 
-      <Select
-        id="lead-budget"
-        name="budget_range"
-        label="Budget Range"
-        placeholder="Select your budget range"
-        options={BUDGET_OPTIONS}
-        value={formData.budget_range}
-        onChange={handleChange}
-        error={errors.budget_range}
-      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <Select
+          id="lead-budget"
+          name="budget_range"
+          label="Budget Range"
+          placeholder="Select your budget range"
+          options={BUDGET_OPTIONS}
+          value={formData.budget_range}
+          onChange={handleChange}
+          error={errors.budget_range}
+        />
+        <Select
+          id="lead-project-type"
+          name="project_type"
+          label="Project Type"
+          placeholder="Select project type (optional)"
+          options={PROJECT_TYPE_OPTIONS}
+          value={formData.project_type}
+          onChange={handleChange}
+        />
+      </div>
 
       <Textarea
         id="lead-message"
@@ -235,7 +263,7 @@ export default function LeadForm() {
       )}
 
       <Button type="submit" loading={submitting} className="w-full" size="lg">
-        Send Inquiry
+        Send Your Inquiry
       </Button>
     </form>
   );

@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "LeadDesk — Capture & Manage Leads",
+  title: "LeadDesk — Software Development Studio",
   description:
-    "Streamline your lead capture workflow. Collect inquiries, track status, and manage your pipeline — all in one place.",
+    "Custom websites, Shopify apps, and mobile products. We partner with businesses to ship software that performs, converts, and scales.",
 };
 
 export default function RootLayout({
