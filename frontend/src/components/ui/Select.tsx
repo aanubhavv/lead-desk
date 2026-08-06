@@ -9,7 +9,7 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
   options: { value: string; label: string }[];
   placeholder?: string;
   value: string;
-  onChange: (e: any) => void;
+  onChange: (e: { target: { name: string; value: string } }) => void;
 }
 
 export default function Select({
@@ -22,7 +22,6 @@ export default function Select({
   value,
   onChange,
   name,
-  ...props
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

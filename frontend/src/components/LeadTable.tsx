@@ -5,7 +5,6 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import Modal from "@/components/ui/Modal";
 import StatusDropdown from "@/components/ui/StatusDropdown";
 import { updateLeadStatus, ApiRequestError } from "@/lib/api";
-import { LEAD_STATUSES } from "@/lib/types";
 import type { Lead, LeadStatus } from "@/lib/types";
 
 interface LeadTableProps {
