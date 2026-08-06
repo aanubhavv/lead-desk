@@ -96,7 +96,7 @@ export default function AdminDashboardPage() {
       )}
 
       {/* Leads table */}
-      <div className="glass rounded-2xl overflow-hidden">
+      <div className="glass rounded-2xl">
         <LeadTable
           leads={leads}
           loading={loading}

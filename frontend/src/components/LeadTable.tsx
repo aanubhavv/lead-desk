@@ -3,6 +3,7 @@
 import { useState } from "react";
 import StatusBadge from "@/components/ui/StatusBadge";
 import Modal from "@/components/ui/Modal";
+import StatusDropdown from "@/components/ui/StatusDropdown";
 import { updateLeadStatus, ApiRequestError } from "@/lib/api";
 import { LEAD_STATUSES } from "@/lib/types";
 import type { Lead, LeadStatus } from "@/lib/types";
@@ -106,7 +107,7 @@ export default function LeadTable({
   return (
     <>
       {/* Desktop table */}
-      <div className="hidden sm:block overflow-x-auto">
+      <div className="hidden sm:block">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/5">
@@ -119,10 +120,11 @@ export default function LeadTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
-            {leads.map((lead) => (
+            {leads.map((lead, index) => (
               <tr
                 key={lead.id}
-                className="hover:bg-white/[0.02] transition-colors duration-150"
+                className="hover:bg-white/[0.02] transition-colors duration-150 relative"
+                style={{ zIndex: leads.length - index }}
               >
                 <td className="px-5 py-4 text-sm text-white font-medium whitespace-nowrap">
                   {lead.name}
@@ -148,39 +150,11 @@ export default function LeadTable({
                 </td>
                 <td className="px-5 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
-                    <select
+                    <StatusDropdown
                       value={lead.status}
-                      onChange={(e) =>
-                        handleStatusChange(lead, e.target.value as LeadStatus)
-                      }
+                      onChange={(newStatus) => handleStatusChange(lead, newStatus)}
                       disabled={updatingId === lead.id}
-                      className={`
-                        bg-transparent text-xs font-medium rounded-full px-3 py-1 border
-                        cursor-pointer transition-all duration-200 appearance-none
-                        focus:outline-none focus:ring-2 focus:ring-indigo-500/40
-                        ${updatingId === lead.id ? "opacity-50 cursor-wait" : ""}
-                        ${
-                          lead.status === "New"
-                            ? "text-emerald-400 border-emerald-500/25 hover:bg-emerald-500/10"
-                            : lead.status === "Contacted"
-                            ? "text-amber-400 border-amber-500/25 hover:bg-amber-500/10"
-                            : "text-slate-400 border-slate-500/25 hover:bg-slate-500/10"
-                        }
-                      `}
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                        backgroundPosition: "right 0.25rem center",
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: "1rem 1rem",
-                        paddingRight: "1.5rem",
-                      }}
-                    >
-                      {LEAD_STATUSES.map((s) => (
-                        <option key={s} value={s} className="bg-slate-900">
-                          {s}
-                        </option>
-                      ))}
-                    </select>
+                    />
                     {updatingId === lead.id && (
                       <svg className="animate-spin h-3.5 w-3.5 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -203,10 +177,11 @@ export default function LeadTable({
 
       {/* Mobile cards */}
       <div className="sm:hidden space-y-3 p-4">
-        {leads.map((lead) => (
+        {leads.map((lead, index) => (
           <div
             key={lead.id}
-            className="rounded-xl bg-white/[0.03] border border-white/5 p-4 space-y-3"
+            className="rounded-xl bg-white/[0.03] border border-white/5 p-4 space-y-3 relative"
+            style={{ zIndex: leads.length - index }}
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -226,29 +201,13 @@ export default function LeadTable({
                 </button>
               )}
             </div>
-            <div className="flex items-center justify-between gap-3 pt-1 border-t border-white/5">
+            <div className="flex items-center justify-between gap-3 pt-1 border-t border-white/5 mt-3">
               <span className="text-xs text-slate-500">{lead.budget_range}</span>
-              <select
+              <StatusDropdown
                 value={lead.status}
-                onChange={(e) =>
-                  handleStatusChange(lead, e.target.value as LeadStatus)
-                }
+                onChange={(newStatus) => handleStatusChange(lead, newStatus)}
                 disabled={updatingId === lead.id}
-                className="bg-white/5 text-xs text-slate-300 rounded-lg px-2 py-1 border border-white/10 focus:outline-none appearance-none cursor-pointer"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                  backgroundPosition: "right 0.25rem center",
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "1rem 1rem",
-                  paddingRight: "1.5rem",
-                }}
-              >
-                {LEAD_STATUSES.map((s) => (
-                  <option key={s} value={s} className="bg-slate-900">
-                    {s}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           </div>
         ))}
