@@ -6,6 +6,16 @@ The project is split into two distinct parts:
 - **Public B2B Funnel (`/`)**: A high-conversion landing page designed to build trust (through client logos, statistics, and testimonials) and qualify incoming leads via a submission form.
 - **Admin Dashboard (`/admin`)**: A secure, authenticated dashboard for agency owners to view, search, paginate, and manage the status (New, Contacted, Closed) of submitted leads.
 
+## Live Demo
+
+- **Deployed Frontend (Vercel)**: https://lead-desk-vert-two.vercel.app/
+- **Deployed Backend (Render)**: https://lead-desk-ks9w.onrender.com
+- **Database**: MongoDB Atlas
+
+**Admin Login Credentials for Testing:**
+- **Username**: `admin`
+- **Password**: `123456`
+
 ---
 
 ## Tech Stack
